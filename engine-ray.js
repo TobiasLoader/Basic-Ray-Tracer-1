@@ -9,72 +9,127 @@ function movePhoton(coor,tx,ty){
 	return coor;
 */
 }
-var PX;
-var PY;
+var PXqD;
+var PYqD;
+var diffX;
+var diffY;
+var Ps;
 var d;
 var d2;
 var stored;
+var stored2;
+var loopNum;
 
 function approx(A,B,n){
 	return A+n>B && A-n<B;
 }
 
+function solveAccuracyErrors(A){
+	if (approx(A,round(A),0.001)){
+		return round(A);
+	}
+	if (approx(A,floor(A)+0.5,0.001)){
+		return floor(A)+0.5;
+	}
+	return A;
+}
+
 function ThreeToTwo(coor,f){
-	PXq = floor((W/2+coor.x*(Dz/(coor.z)))/qual);
-  PYq = floor((H/2-coor.y*(Dz/(coor.z)))/qual);
-//   print(PYq);
+	PXqD = (W/2+coor.x*(Dz/coor.z))/qual;
+  PYqD = (H/2-coor.y*(Dz/coor.z))/qual;
+  PXq = round(PXqD);
+  PYq = round(PYqD);
+
+  //   print(PYq);
   if (PXq>0 && PYq>0 && pixMatrix.length>PYq && pixMatrix[PYq].length>PXq){
-	  d = sqrt(sq(coor.x-camPho.x)+sq(coor.y-camPho.y)+sq(coor.z-camPho.z));
 	  stored = pixMatrix[PYq][PXq][0];
+	  d = solveAccuracyErrors(sqrt(sq(coor.x-camPho.x)+sq(coor.y-camPho.y)+sq(coor.z-camPho.z)));
   	if (f==="c"){
-			if (stored>d || stored === 0){
-	  			pixMatrix[PYq][PXq] = [d,pixCol,0];
+	  	if (stored>d || stored === 0){
+	  		pixMatrix[PYq][PXq][0] = d;
+	  		pixMatrix[PYq][PXq][1] = pixCol;
 	  	}
 	  }
 	  if (f==="l"){
-			if (approx(stored,d,qual)){
-		  	d2 = sqrt(sq(coor.x-lightPho.x)+sq(coor.y-lightPho.y)+sq(coor.z-lightPho.z));
-	  		pixMatrix[PYq][PXq][2] = d2;
-  		}
+		  Ps = [[PXq],[PYq]];
+			diffX = PXqD-PXq;
+			diffY = PYqD-PYq;
+		  if (PXq>1 && PXq<pixMatrix[PYq].length-1 && PYq>1 && PYq<pixMatrix.length-1){
+			  if (diffX<compLightScatter && diffX>0){
+				  Ps[0].push(PXq+1);
+			  } else if (diffX>-compLightScatter && diffX<0){
+				  Ps[0].push(PXq-1);
+			  }
+			  if (diffY<compLightScatter && diffY>0){
+				  Ps[1].push(PYq+1);
+			  } else if (diffY>-compLightScatter && diffY<0){
+				  Ps[1].push(PYq-1);
+			  }
+		  }
+		  if (Ps[0].length===2 && Ps[1].length===2){
+			  loopNum = 2;
+		  } else {
+			  loopNum = 1;
+		  }
+// 		  print(PXq  + "-" + PYq);
+		  d2 = solveAccuracyErrors(sqrt(sq(coor.x-lightPho.x)+sq(coor.y-lightPho.y)+sq(coor.z-lightPho.z)));
+			for (var i=0; i<loopNum; i+=1){
+				if (pixMatrix[Ps[1][i]][Ps[0][i]][2] === 0 && approx(stored,d,qual)){
+		  		pixMatrix[Ps[1][i]][Ps[0][i]][2] = d2;
+// 		  		print(d2);
+				}
+	  	}
   	}
   }
 }
 function photonsCalc(){
-	stop = [false,false];
-	if (done[0] === false){
-		photonsCamera();
-	}
-	if (stop[0] === false){
-		print("Camera Done");
-// 		print(camPho);
-		done[0] = true;
-		if (done[1] === false){
-			photonsLight();
+	if (PLAY){
+		stop = [false,false];
+		if (done[0] === false){
+			photonsCamera();
 		}
-		if (stop[1] === false){
-			done[1] = true;
-			print("Light Done");
-			finalSec = seconds();
-			beep.play();
-// 			print(lightPho);
-// 			print(pixMatrix);
+		if (stop[0] === false){
+			if (!done[0]){
+				print("Camera Done");
+				done[0] = true;
+			}
+			print("lastThetaX2:",lastThetaX2);
+			
+			if (done[1] === false){
+/*
+				for (var i=0; i<pixMatrix.length; i+=1){
+					for (var j=0; j<pixMatrix[i].length; j+=1){
+						print(pixMatrix[i][j][2])
+					}	
+				}	
+*/
+				photonsLight();
+			}
+			if (stop[1] === false){
+				done[1] = true;
+				print("Light Done");
+				finalSec = seconds();
+				beep.play();
+	// 			print(lightPho);
+	// 			print(pixMatrix);
+			}
 		}
 	}
 }
 function photonsCamera(){
 	prev = seconds();
-	for (var thetaX=lastThetaX; thetaX<Angle/2; thetaX+=(20*qual)/W){
-		if (seconds() !== prev){
+	for (var thetaX=lastThetaX; thetaX<AngleX/2; thetaX+=(AngleX*qual)/(2*W)){
+		if (seconds() > prev+loadingIntervals-1){
 			lastThetaX = thetaX;
 			stop[0] = true;
 			break;
 		} else {
-			for (var thetaY=-Angle/2; thetaY<Angle/2; thetaY+=(20*qual)/H){
+			for (var thetaY=-AngleY/2; thetaY<AngleY/2; thetaY+=(AngleY*qual)/(2*H)){
 				pho1 = camPho;
-				for (var i=0; i<200; i+=1){
-					pho1 = movePhoton(pho1,thetaX+angleCamera[0],thetaY-angleCamera[1]);
+				for (var i=0; i<depth; i+=1){
+					pho1 = movePhoton(pho1,thetaX+angleCamera[0],thetaY+angleCamera[1]);
 				  collide = scene(pho1);
-					if (collide){
+					if (scene(pho1)){
 						ThreeToTwo(pho1,"c");
 						break;
 					}
@@ -86,24 +141,25 @@ function photonsCamera(){
 
 function photonsLight(){
 	prev = seconds();
-	for (var thetaX2=lastThetaX2; thetaX2<Angle; thetaX2+=(qual/20)){
-		if (seconds() !== prev){
+// 	print(lightPho);
+	for (var thetaX2=lastThetaX2; thetaX2<AngleX/2; thetaX2+=(AngleX*qual)/(2*W)){
+		if (seconds() > prev+loadingIntervals-1){
 			lastThetaX2 = thetaX2;
 			stop[1] = true;
 			break;
 		} else {
-			for (var thetaY2=-Angle; thetaY2<Angle; thetaY2+=(qual/20)){
+			for (var thetaY2=-AngleX/2; thetaY2<AngleX/2; thetaY2+=(AngleX*qual)/(2*H)){
 				pho2 = lightPho;
-				for (var i=0; i<100; i+=1){
-					pho2 = movePhoton(pho2,thetaX2+angleLight[0],thetaY2-angleLight[1]);
-					collide = scene(pho2);
-					if (collide){
-// 						print("Collide");
+				for (var i=0; i<depth; i+=1){
+					pho2 = movePhoton(pho2,thetaX2+angleLight[0],thetaY2+angleLight[1]);
+					if (scene(pho2)){
 						ThreeToTwo(pho2,"l");
 						break;
 					}
 				}
 			}
 		}
+// 		print(thetaX2);
 	}
+	
 }

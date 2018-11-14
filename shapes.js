@@ -6,7 +6,7 @@ var Y;
 var Z;
 
 function sphereEqu(coor,r,pho,col){
-	if (sq((pho.x-coor.x))+sq((pho.y-coor.y))+sq((pho.z-coor.z))<=sq(r)){
+	if (sq((pho.x-coor.x))+sq((pho.y-coor.y))+sq((pho.z-coor.z))<sq(r)){
 		pixCol = col;
 		return true;
 	}
@@ -20,7 +20,7 @@ function PlaneEqu(grads,val,ineq,pho,col){
 }
 
 function cuboidEqu(coor,dimensions,pho,col){
-	if (pho.x>coor.x-dimensions.x && pho.x<coor.x+dimensions.x && pho.y>coor.y-dimensions.y && pho.y<coor.y+dimensions.y && pho.z>coor.z-dimensions.z && pho.z<coor.z+dimensions.z){
+	if (pho.x>coor.x-dimensions.x/2 && pho.x<coor.x+dimensions.x/2 && pho.y>coor.y-dimensions.y/2 && pho.y<coor.y+dimensions.y/2 && pho.z>coor.z-dimensions.z/2 && pho.z<coor.z+dimensions.z/2){
 		pixCol = col;
 		return true;
 	}
