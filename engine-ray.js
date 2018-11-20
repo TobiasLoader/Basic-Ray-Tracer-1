@@ -43,11 +43,12 @@ function ThreeToTwo(coor,f){
   //   print(PYq);
   if (PXq>0 && PYq>0 && pixMatrix.length>PYq && pixMatrix[PYq].length>PXq){
 	  stored = pixMatrix[PYq][PXq][0];
-	  d = solveAccuracyErrors(sqrt(sq(coor.x-camPho.x)+sq(coor.y-camPho.y)+sq(coor.z-camPho.z)));
+		d = solveAccuracyErrors(sqrt(sq(coor.x-camPho.x)+sq(coor.y-camPho.y)+sq(coor.z-camPho.z)));
   	if (f==="c"){
 	  	if (stored>d || stored === 0){
 	  		pixMatrix[PYq][PXq][0] = d;
 	  		pixMatrix[PYq][PXq][1] = pixCol;
+	  		pixMatrix[PYq][PXq][3] = reflectedDist;
 	  	}
 	  }
 	  if (f==="l"){
@@ -75,7 +76,7 @@ function ThreeToTwo(coor,f){
 		  d2 = solveAccuracyErrors(sqrt(sq(coor.x-lightPho.x)+sq(coor.y-lightPho.y)+sq(coor.z-lightPho.z)));
 			for (var i=0; i<loopNum; i+=1){
 				if (pixMatrix[Ps[1][i]][Ps[0][i]][2] === 0 && approx(stored,d,qual)){
-		  		pixMatrix[Ps[1][i]][Ps[0][i]][2] = d2;
+		  		pixMatrix[Ps[1][i]][Ps[0][i]][2] = d2+2*pixMatrix[PYq][PXq][3];
 // 		  		print(d2);
 				}
 	  	}
@@ -93,7 +94,7 @@ function photonsCalc(){
 				print("Camera Done");
 				done[0] = true;
 			}
-			print("lastThetaX2:",lastThetaX2);
+// 			print("lastThetaX2:",lastThetaX2);
 			
 			if (done[1] === false){
 /*
@@ -126,11 +127,24 @@ function photonsCamera(){
 		} else {
 			for (var thetaY=-AngleY/2; thetaY<AngleY/2; thetaY+=(AngleY*qual)/(2*H)){
 				pho1 = camPho;
+				colCoor = false;
 				for (var i=0; i<depth; i+=1){
 					pho1 = movePhoton(pho1,thetaX+angleCamera[0],thetaY+angleCamera[1]);
-				  collide = scene(pho1);
-					if (scene(pho1)){
-						ThreeToTwo(pho1,"c");
+					if (scene(pho1,false,false,[thetaX+angleCamera[0],thetaY+angleCamera[1]])){
+						colCoor = pho1;
+						if (reflectPho){
+							for (var i=0; i<depth; i+=1){
+								pho1 = movePhoton(pho1,reflectedAngles[0],reflectedAngles[1]);
+								if (scene(pho1,true,colCoor,[])){
+									break;
+								}
+							}
+							reflectPho = false;
+							reflectedAngles = [];
+						}
+						ThreeToTwo(colCoor,"c");
+						colCoor = false;
+						reflectedDist = 0;
 						break;
 					}
 				}

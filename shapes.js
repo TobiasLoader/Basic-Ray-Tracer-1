@@ -5,21 +5,42 @@ var X;
 var Y;
 var Z;
 
-function sphereEqu(coor,r,pho,col){
-	if (sq((pho.x-coor.x))+sq((pho.y-coor.y))+sq((pho.z-coor.z))<sq(r)){
-		pixCol = col;
+function PlaneEqu(grads,val,pho,col,afterBounce,colCoor,reflect,A){
+	var ineq = grads.x*pho.x+grads.y*pho.y+grads.z*pho.z;
+	if (ineq+1>val && ineq-1<val){
+		if (reflect && !done[0] && A && !reflectPho && !afterBounce){
+			reflectedAngles = [A[0],-A[1]];
+			reflectPho = true;
+			pixCol = col;
+		} else {
+			pixCol = col;
+			if (afterBounce && !done[0]){
+				reflectedDist = solveAccuracyErrors(sqrt(sq(pho.x-colCoor.x)+sq(pho.y-colCoor.y)+sq(pho.z-colCoor.z)));
+			}
+		}
 		return true;
 	}
 	return false;
 }
 
-function PlaneEqu(grads,val,ineq,pho,col){
-	if (ineq===">"){if (grads.x*pho.x+grads.y*pho.y+grads.z*pho.z>val){pixCol = col; return true;}}
-	if (ineq==="<"){if (grads.x*pho.x+grads.y*pho.y+grads.z*pho.z<val){pixCol = col; return true;}}
+
+function sphereEqu(coor,r,pho,col,afterBounce,colCoor,reflect,A){
+	if (sq((pho.x-coor.x))+sq((pho.y-coor.y))+sq((pho.z-coor.z))<sq(r)){
+		if (reflect && !done[0] && A && !reflectPho && !afterBounce){
+			reflectPho = true;
+			pixCol = col;
+		} else {
+			pixCol = col;
+			if (afterBounce && !done[0]){
+				reflectedDist = solveAccuracyErrors(sqrt(sq(pho.x-colCoor.x)+sq(pho.y-colCoor.y)+sq(pho.z-colCoor.z)));
+			}
+		}
+		return true;
+	}
 	return false;
 }
 
-function cuboidEqu(coor,dimensions,pho,col){
+function cuboidEqu(coor,dimensions,pho,col,afterBounce,colCoor,reflect,A){
 	if (pho.x>coor.x-dimensions.x/2 && pho.x<coor.x+dimensions.x/2 && pho.y>coor.y-dimensions.y/2 && pho.y<coor.y+dimensions.y/2 && pho.z>coor.z-dimensions.z/2 && pho.z<coor.z+dimensions.z/2){
 		pixCol = col;
 		return true;
@@ -27,7 +48,7 @@ function cuboidEqu(coor,dimensions,pho,col){
 	return false;
 }
 
-function pyramidEqu(coor,s,pho,col){
+function pyramidEqu(coor,s,pho,col,reflect,A){
 /*
 	x = pho.x;
 	y = pho.y;

@@ -33,9 +33,14 @@ var finalSec;
 var pauseStart;
 var pausedSec;
 var collide;
+var colCoor;
+var reflectPho;
+var reflectedAngles;
+var reflectedDist;
 var beep;
 var PLAY = true;
 var loadingIntervals;
+
 } // Variables
 
 function preload(){
@@ -60,10 +65,10 @@ function reset(){
 	pho1;
 	pho2;
 	angleCamera = [0,0];
-	angleLight = [0,0];
+	angleLight = [-7,3];
 	camPho = {x:0,y:0,z:0};
 // 	lightPho = {x:-60*cos(angleLight[0]-90),y:0,z:60*sin(angleLight[0]-90)+60};
-	lightPho = {x:10,y:0,z:0};
+	lightPho = {x:8,y:5,z:-2};
 	lastThetaX = -AngleX/2;
 	lastThetaX2 = -AngleX/2;
 	lightScattering = 1; // 0 <= x <= 1
@@ -74,6 +79,11 @@ function reset(){
 	finalSec = 0;
 	pauseStart = 0;
 	pausedSec = 0;
+	colCoor = {x:0,y:0,z:0};
+	reflectPho = false;
+	reflectedAngles = [];
+	reflectedDist = 0;
+	
 	if (sceneCalcArray.length){
 		done[0] = true;
 		pixMatrix = sceneCalcArray;
@@ -81,7 +91,7 @@ function reset(){
 		for (var h=0; h<floor(H/qual); h+=1){
 			pixMatrix.push([]);
 			for (var w=0; w<floor(W/qual); w+=1){
-				pixMatrix[h].push([0,[pixCol[0],pixCol[1],pixCol[2]],0]);
+				pixMatrix[h].push([0,[pixCol[0],pixCol[1],pixCol[2]],0,0]);
 			}
 		}
 	}
@@ -97,10 +107,10 @@ function setup() {
 	canvas = createCanvas(window.innerWidth, window.innerHeight);
   frameRate(fps);
   background(backCol);
-  qual = int(prompt("The quality as an integer greater than 1.\nLower the integer, better the quality. Eg: 10"));
-	if (!Number.isInteger(qual)){
-		alert("The quality has defaulted to 10.");
-		qual = 10;
+  qual = parseFloat(prompt("The quality as a positive number.\nLower the number, better the quality. Eg: 5"));
+	if (isNaN(qual)){
+		alert("The quality has defaulted to 5.");
+		qual = 5;
 	}
   reset();
  }
