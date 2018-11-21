@@ -1,7 +1,7 @@
 
 
 function movePhoton(coor,tx,ty){
-	return {x:(coor.x+(qual/2)*sin(tx)),y:(coor.y+(qual/2)*sin(ty)*cos(tx)),z:(coor.z+(qual/2)*cos(ty)*cos(tx))};
+	return {x:(coor.x+(qual)*sin(tx)),y:(coor.y+(qual)*sin(ty)*cos(tx)),z:(coor.z+(qual)*cos(ty)*cos(tx))};
 /*
 	coor.x+=(qual/2)*sin(tx);
 	coor.y+=(qual/2)*sin(ty)*cos(tx);
@@ -128,12 +128,12 @@ function photonsCamera(){
 			for (var thetaY=-AngleY/2; thetaY<AngleY/2; thetaY+=(AngleY*qual)/(2*H)){
 				pho1 = camPho;
 				colCoor = false;
-				for (var i=0; i<depth; i+=1){
+				for (var i=0; i<depth/qual; i+=1){
 					pho1 = movePhoton(pho1,thetaX+angleCamera[0],thetaY+angleCamera[1]);
 					if (scene(pho1,false,false,[thetaX+angleCamera[0],thetaY+angleCamera[1]])){
 						colCoor = pho1;
 						if (reflectPho){
-							for (var i=0; i<depth; i+=1){
+							for (var i=0; i<depth/qual; i+=1){
 								pho1 = movePhoton(pho1,reflectedAngles[0],reflectedAngles[1]);
 								if (scene(pho1,true,colCoor,[])){
 									break;
@@ -164,7 +164,7 @@ function photonsLight(){
 		} else {
 			for (var thetaY2=-AngleX/2; thetaY2<AngleX/2; thetaY2+=(AngleX*qual)/(2*H)){
 				pho2 = lightPho;
-				for (var i=0; i<depth; i+=1){
+				for (var i=0; i<depth/qual; i+=1){
 					pho2 = movePhoton(pho2,thetaX2+angleLight[0],thetaY2+angleLight[1]);
 					if (scene(pho2)){
 						ThreeToTwo(pho2,"l");
