@@ -28,6 +28,7 @@ var stop;
 var loadingAddon;
 var f = ["Quicksand","PlayFair Display"];
 var backCol;
+var bgLumi;
 var startSec;
 var finalSec;
 var pauseStart;
@@ -101,6 +102,7 @@ function reset(){
 
 function setup() {
 	backCol = color(100,150,200);
+	bgLumi = (red(backCol) + green(backCol) + blue(backCol))/(255*3*2);
 	loadingIntervals = 5;
 	fps = 2/loadingIntervals;
 // 	backCol = color(30);

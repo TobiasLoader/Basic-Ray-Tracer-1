@@ -111,6 +111,9 @@ function photonsCalc(){
 				print("Light Done");
 				finalSec = seconds();
 				beep.play();
+				background(backCol);
+				drawMatrix();
+				note("Copyright © Tobias Codes | Render time: " + str(finalSec-startSec-pausedSec) + "s");
 	// 			print(lightPho);
 	// 			print(pixMatrix);
 			}

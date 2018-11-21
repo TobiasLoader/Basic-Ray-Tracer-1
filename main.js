@@ -6,12 +6,12 @@ function drawMatrix(){
 		for (var w=0; w<pixMatrix[h].length; w+=1){
 			if (pixMatrix[h][w][0]){
 				if (pixMatrix[h][w][2]!==0){
-					ld =  pow(1.00025,-sq(pixMatrix[h][w][2]));
+					ld =  (1-bgLumi)*pow(1.00025,-sq(pixMatrix[h][w][2]));
 				} else {
 					ld = 0;
 				}
 // 				ld = 1;
-				fill(pixMatrix[h][w][1][0]*ld,pixMatrix[h][w][1][1]*ld,pixMatrix[h][w][1][2]*ld,255 * pow(1.0002,-sq(pixMatrix[h][w][0])));
+				fill(pixMatrix[h][w][1][0]*(ld+bgLumi),pixMatrix[h][w][1][1]*(ld+bgLumi),pixMatrix[h][w][1][2]*(ld+bgLumi),255 * pow(1.0002,-sq(pixMatrix[h][w][0])));
 // 				fill(0);
 				rect(w*qual,h*qual,qual,qual);
 			}
@@ -43,11 +43,8 @@ function loadingScreen(){
 }
 
 function draw() {
-	background(backCol);
-	if (done[1]===true){
-		drawMatrix();
-		note("Copyright © Tobias Codes | Render time: " + str(finalSec-startSec-pausedSec) + "s");
-	} else {
+	if (done[1]===false) {
+		background(backCol);
 		if (PLAY){
 			drawMatrix();
 			loadingScreen();
