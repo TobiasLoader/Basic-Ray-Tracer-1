@@ -84,6 +84,7 @@ function reset(){
 	reflectPho = false;
 	reflectedAngles = [];
 	reflectedDist = 0;
+	fps = 2/loadingIntervals;
 	
 	if (sceneCalcArray.length){
 		done[0] = true;
@@ -103,18 +104,17 @@ function reset(){
 function setup() {
 	backCol = color(100,150,200);
 	bgLumi = (red(backCol) + green(backCol) + blue(backCol))/(255*3*2);
-	loadingIntervals = 5;
-	fps = 2/loadingIntervals;
-// 	backCol = color(30);
+	// 	backCol = color(30);
 	canvas = createCanvas(window.innerWidth, window.innerHeight);
-  frameRate(fps);
   background(backCol);
   qual = parseFloat(prompt("The quality as a positive number.\nLower the number, better the quality. Eg: 5"));
 	if (isNaN(qual)){
 		alert("The quality has defaulted to 5.");
 		qual = 5;
 	}
+	loadingIntervals = ceil(10/qual);
   reset();
+  frameRate(fps);
  }
 
 function seconds(){

@@ -48,15 +48,19 @@ function draw() {
 		if (PLAY){
 			drawMatrix();
 			loadingScreen();
-			note("Copyright © Tobias Codes | Render time: " + str(seconds()-startSec-pausedSec) + "s");
+			note("Copyright © Tobias Codes | Render time: " + str(seconds()-startSec-pausedSec) + "s | Q" + qual);
 		} else {
 			fill(0,100);
 			rect(W/2,H/2,W,H);
 			popUp("PAUSED")
-			note("Copyright © Tobias Codes | Render time: " + str(pauseStart-startSec-pausedSec) + "s");
+			note("Copyright © Tobias Codes | Render time: " + str(pauseStart-startSec-pausedSec) + "s | Q" +qual);
 		}
 		photonsCalc();
 // 		print(lastThetaX);
+	} else {
+		background(backCol);
+		drawMatrix();
+		note("Copyright © Tobias Codes | Render time: " + str(finalSec-startSec-pausedSec) + "s | Q"+qual);
 	}
 }
 
