@@ -72,7 +72,7 @@ function reset(){
 	lightPho = {x:8,y:5,z:-2};
 	lastThetaX = -AngleX/2;
 	lastThetaX2 = -AngleX/2;
-	lightScattering = 1; // 0 <= x <= 1
+	lightScattering = 32;
 	compLightScatter = (lightScattering)/2;
 	stop = [false,false];
 	loadingAddon = "";

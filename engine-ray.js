@@ -52,33 +52,59 @@ function ThreeToTwo(coor,f){
 	  	}
 	  }
 	  if (f==="l"){
-		  Ps = [[PXq],[PYq]];
+		  Ps = [[PXq-1,PXq-1,PXq-1,PXq,PXq,PXq,PXq+1,PXq+1,PXq+1],[PYq-1,PYq,PYq+1,PYq-1,PYq,PYq+1,PYq-1,PYq,PYq+1]];
+// 		  var j;
+		  var hitNum = round((lightScattering/4)*pow((-Math.log((random(0,1)+pow(Math.E,-4))/(1+pow(Math.E,-4)))),0.5)+(lightScattering/2));
+// 		  print(hitNum);
+/*
+		  for (var i=0; i<hitNum; i+=1){
+			  j = round(Math.random(0,Ps[0].length));
+				Ps[0].splice(j,1);
+				Ps[1].splice(j,1);
+			}
+*/
+			for (var i=0; i<sqrt(hitNum); i+=1){
+				for (var j=0; j<sqrt(hitNum); j+=1){
+					Ps[0].push(round(PXq+i));
+					Ps[1].push(round(PYq+j));
+				}
+			}
+/*
 			diffX = PXqD-PXq;
 			diffY = PYqD-PYq;
 		  if (PXq>1 && PXq<pixMatrix[PYq].length-1 && PYq>1 && PYq<pixMatrix.length-1){
 			  if (diffX<compLightScatter && diffX>0){
 				  Ps[0].push(PXq+1);
+				  Ps[0].push(PXq+2);
 			  } else if (diffX>-compLightScatter && diffX<0){
 				  Ps[0].push(PXq-1);
+				  Ps[0].push(PXq-2);
 			  }
 			  if (diffY<compLightScatter && diffY>0){
 				  Ps[1].push(PYq+1);
+				  Ps[1].push(PYq+2);
 			  } else if (diffY>-compLightScatter && diffY<0){
 				  Ps[1].push(PYq-1);
+				  Ps[1].push(PYq-2);
 			  }
 		  }
-		  if (Ps[0].length===2 && Ps[1].length===2){
-			  loopNum = 2;
-		  } else {
-			  loopNum = 1;
+			loopNum = Ps[0].length;
+		  if (Ps[1].length<loopNum){
+			  loopNum = Ps[1].length;
 		  }
-// 		  print(PXq  + "-" + PYq);
+		  */
+		  loopNum = hitNum-1;
+		  // 		  print(PXq  + "-" + PYq);
 		  d2 = solveAccuracyErrors(sqrt(sq(coor.x-lightPho.x)+sq(coor.y-lightPho.y)+sq(coor.z-lightPho.z)));
-			for (var i=0; i<loopNum; i+=1){
-				if (pixMatrix[Ps[1][i]][Ps[0][i]][2] === 0 && approx(stored,d,qual)){
-		  		pixMatrix[Ps[1][i]][Ps[0][i]][2] = d2+2*pixMatrix[PYq][PXq][3];
-// 		  		print(d2);
-				}
+		  if (loopNum){
+				for (var i=0; i<loopNum; i+=1){
+					if (Ps[0][i]>0 && Ps[0][i]<floor(W/qual) && Ps[1][i]>0 && Ps[1][i]<floor(H/qual)){
+						if (pixMatrix[Ps[1][i]][Ps[0][i]][2] === 0 && approx(stored,d,qual)){
+				  		pixMatrix[Ps[1][i]][Ps[0][i]][2] = d2+2*pixMatrix[PYq][PXq][3];
+		// 		  		print(d2);
+						}
+					}
+		  	}
 	  	}
   	}
   }

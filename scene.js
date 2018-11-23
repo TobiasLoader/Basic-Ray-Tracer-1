@@ -29,16 +29,16 @@ function scene(pho,afterBounce,colCoor,A){
 		sphereEqu(COOR[7],15,pho,[206,206,224],afterBounce,colCoor)
 // 		sphereEqu({x:0,y:0,z:120},20,pho,color(255))
 /*
-		cuboidEqu({x:-15,y:0,z:60},{x:5,y:20,z:40},pho,color(74, 111, 165)) ||
-		cuboidEqu({x:-15,y:10,z:60},{x:20,y:5,z:40},pho,color(74, 111, 165)) ||
+		cuboidEqu({x:-15,y:0,z:60},{x:5,y:20,z:40},pho,[74, 111, 165],afterBounce,colCoor) ||
+		cuboidEqu({x:-15,y:10,z:60},{x:20,y:5,z:40},pho,[74, 111, 165],afterBounce,colCoor) ||
 		
-		sphereEqu({x:0,y:-5,z:50},10,pho,color(255)) ||
+		sphereEqu({x:0,y:-5,z:50},10,pho,[255,255,255],afterBounce,colCoor) ||
 		
-		cuboidEqu({x:15,y:-3,z:60},{x:2,y:14,z:40},pho,color(165, 79, 74)) ||
-		cuboidEqu({x:17,y:2,z:60},{x:2,y:2,z:40},pho,color(165, 79, 74)) ||
-		cuboidEqu({x:19,y:0,z:59},{x:2,y:2,z:40},pho,color(165, 79, 74)) ||
-		cuboidEqu({x:21,y:2,z:59},{x:2,y:2,z:40},pho,color(165, 79, 74)) ||
-		cuboidEqu({x:23,y:-3,z:59},{x:2,y:14,z:40},pho,color(165, 79, 74))
+		cuboidEqu({x:15,y:-3,z:60},{x:2,y:14,z:40},pho,[165, 79, 74],afterBounce,colCoor) ||
+		cuboidEqu({x:17,y:2,z:60},{x:2,y:2,z:40},pho,[165, 79, 74],afterBounce,colCoor) ||
+		cuboidEqu({x:19,y:0,z:59},{x:2,y:2,z:40},pho,[165, 79, 74],afterBounce,colCoor) ||
+		cuboidEqu({x:21,y:2,z:59},{x:2,y:2,z:40},pho,[165, 79, 74],afterBounce,colCoor) ||
+		cuboidEqu({x:23,y:-3,z:59},{x:2,y:14,z:40},pho,[165, 79, 74],afterBounce,colCoor)
 */
 
 	){
