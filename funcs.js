@@ -107,10 +107,10 @@ function setup() {
 	// 	backCol = color(30);
 	canvas = createCanvas(window.innerWidth, window.innerHeight);
   background(backCol);
-  qual = parseFloat(prompt("The quality as a positive number.\nLower the number, better the quality. Eg: 5"));
+  qual = parseFloat(prompt("Input the render quality as a positive number.\nThe lower the number you imput, the better the quality of image. Eg: 2"));
 	if (isNaN(qual)){
-		alert("The quality has defaulted to 5.");
-		qual = 5;
+		alert("The quality has defaulted to 2.");
+		qual = 2;
 	}
 	loadingIntervals = ceil(10/qual);
   reset();
