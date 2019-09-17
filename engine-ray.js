@@ -136,7 +136,7 @@ function photonsCalc(){
 				done[1] = true;
 				print("Light Done");
 				finalSec = seconds();
-				beep.play();
+// 				beep.play();
 	// 			print(lightPho);
 	// 			print(pixMatrix);
 			}

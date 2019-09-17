@@ -45,7 +45,7 @@ var loadingIntervals;
 } // Variables
 
 function preload(){
-	beep = loadSound("Beep.mp3"); // Originally called: "Analog Watch Alarm Sound" from "SoundBible.com"
+// 	beep = loadSound("Beep.mp3"); // Originally called: "Analog Watch Alarm Sound" from "SoundBible.com"
 }
 
 function reset(){
