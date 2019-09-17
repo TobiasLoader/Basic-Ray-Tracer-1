@@ -128,5 +128,5 @@ function mouseClicked(){
 			PLAY = true;
 		}
 	}
-	beep.stop();
+// 	beep.stop();
 }
