@@ -43,24 +43,40 @@ function loadingScreen(){
 }
 
 function draw() {
-	if (done[1]===false) {
-		background(backCol);
-		if (PLAY){
-			drawMatrix();
-			loadingScreen();
-			note("Copyright © Tobias Codes | Render time: " + str(seconds()-startSec-pausedSec) + "s | Q" + qual);
-		} else {
-			fill(0,100);
-			rect(W/2,H/2,W,H);
-			popUp("PAUSED")
-			note("Copyright © Tobias Codes | Render time: " + str(pauseStart-startSec-pausedSec) + "s | Q" +qual);
+	if (firstSceneClicked){
+		if (!afterFirstClicked){
+			  background(backCol);
+			  qual = parseFloat(prompt("We now need to choose the RENDER QUALITY of the image:\n\nThis will be a positive integer between 1 and 5.\nThe lower the number, the higher the quality of image, but the slower it will take to render; eg: a quality of 2 may take one minute whilst a quality of 5 only a few seconds.\n\nNow please input your preferred render quality:"));
+				if (isNaN(qual)){
+					alert("The quality has defaulted to 3.");
+					qual = 3;
+				}
+				loadingIntervals = ceil(10/qual);
+			  reset();
+			  frameRate(fps);10
 		}
-		photonsCalc();
-// 		print(lastThetaX);
+		if (done[1]===false) {
+			background(backCol);
+			if (PLAY){
+				drawMatrix();
+				loadingScreen();
+				note("Render time: " + str(seconds()-startSec-pausedSec) + "s | Q" + qual);
+			} else {
+				fill(0,100);
+				rect(W/2,H/2,W,H);
+				popUp("PAUSED")
+				note("Render time: " + str(pauseStart-startSec-pausedSec) + "s | Q" +qual);
+			}
+			photonsCalc();
+	// 		print(lastThetaX);
+		} else {
+			background(backCol);
+			drawMatrix();
+			note("Render time: " + str(finalSec-startSec-pausedSec) + "s | Q"+qual);
+		}
+		afterFirstClicked = true;
 	} else {
-		background(backCol);
-		drawMatrix();
-		note("Copyright © Tobias Codes | Render time: " + str(finalSec-startSec-pausedSec) + "s | Q"+qual);
+		firstScene();
 	}
 }
 
@@ -119,6 +135,9 @@ window.onresize = function() {
 };
 
 function mouseClicked(){
+	if (mouseX>(window.innerWidth/2 - 125) && mouseX<(window.innerWidth/2+125) && mouseY>13*window.innerHeight/20-20 && mouseY<13*window.innerHeight/20+20){
+		firstSceneClicked = true;
+	}
 	if (!done[1]){
 		if (PLAY){
 			PLAY = false;
