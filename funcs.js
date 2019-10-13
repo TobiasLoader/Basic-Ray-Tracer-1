@@ -41,6 +41,8 @@ var reflectedDist;
 var beep;
 var PLAY = true;
 var loadingIntervals;
+var firstSceneClicked;
+var afterFirstClicked;
 
 } // Variables
 
@@ -101,20 +103,41 @@ function reset(){
 // 	loadingScreen();
 }
 
+
+function firstScene(){
+	background(255);
+	textFont(f[0],window.innerWidth/25);
+	fill(0);
+	noStroke();
+	textAlign(CENTER,CENTER);
+	text('Welcome to Basic Ray Tracer V1',window.innerWidth/2,5*window.innerHeight/20)
+	var welcomeWidth = textWidth('Welcome to Basic Ray Tracer V1');
+	textSize(window.innerWidth/55);
+	text('Soon after finishing my 3D-Engine in autumn 2018, and still being interested in the representation of the 3D world on a 2D screen, I began another large project. I had heard about the ray tracing technique, which enabled realistic 3D images to be drawn using virtual light rays, so I set out to write my own basic implementation.',window.innerWidth/2-welcomeWidth/2,7*window.innerHeight/20,welcomeWidth);
+	
+	
+	fill(85);
+	stroke(150);
+	rect(window.innerWidth/2-125,13*window.innerHeight/20-20,250,40,2);
+	fill(255);
+	noStroke();
+	text("Let's Get Tracing...",window.innerWidth/2-welcomeWidth/2,13*window.innerHeight/20,welcomeWidth);
+	if (mouseX>(window.innerWidth/2 - 125) && mouseX<(window.innerWidth/2+125) && mouseY>13*window.innerHeight/20-20 && mouseY<13*window.innerHeight/20+20){	
+		cursor('pointer');
+	} else {
+		cursor('default');
+	}
+}
+
 function setup() {
+	firstSceneClicked = false;
+	afterFirstClicked = false;
+	W = window.innerWidth;
+	H = window.innerHeight;
 	backCol = color(100,150,200);
 	bgLumi = (red(backCol) + green(backCol) + blue(backCol))/(255*3*2);
 	// 	backCol = color(30);
 	canvas = createCanvas(window.innerWidth, window.innerHeight);
-  background(backCol);
-  qual = parseFloat(prompt("Input the render quality as a positive number.\nThe lower the number you imput, the better the quality of image. Eg: 2"));
-	if (isNaN(qual)){
-		alert("The quality has defaulted to 2.");
-		qual = 2;
-	}
-	loadingIntervals = ceil(10/qual);
-  reset();
-  frameRate(fps);
  }
 
 function seconds(){
